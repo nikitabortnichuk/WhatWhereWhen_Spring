@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +27,8 @@ import java.util.Set;
 @DiscriminatorValue("NO_VARIANTS")
 public class QuestionNoVariants extends Question {
 
+    @NotNull
+    @Column(nullable = false)
     private String answer;
 
     public QuestionNoVariants(long id, String questionText, QuestionType questionType, Set<Game> games, String answer){

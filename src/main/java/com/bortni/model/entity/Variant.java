@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,9 +31,12 @@ public class Variant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @Column(nullable = false, unique = true)
     private String text;
 
-    @Column(name = "is_correct")
+    @NotNull
+    @Column(name = "is_correct", nullable = false)
     private boolean correct;
 
     @ManyToOne(fetch = FetchType.EAGER)

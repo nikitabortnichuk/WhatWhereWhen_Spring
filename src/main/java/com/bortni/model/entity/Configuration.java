@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +18,13 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Configuration {
 
+    @NotNull
     private int roundTime;
+
+    @NotNull
     private int playersNumber;
+
+    @NotNull
     private int roundsNumber;
 
 }

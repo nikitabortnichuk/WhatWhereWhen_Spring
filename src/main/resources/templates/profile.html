@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div class="content m-5">
+    <div class="container">
+        <h2>PROFILE</h2>
+
+        <p th:text="'Username: ' + ${user.getUsername()}">Username</p>
+        <p th:text="'Email: ' + ${user.getEmail()}">Email</p>
+
+        <h3>My games: </h3>
+        <table class="game_table table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Game Identification</th>
+                <th scope="col">Number of rounds</th>
+                <th scope="col">Number of players</th>
+                <th scope="col">Correct answers</th>
+                <th scope="col">Incorrect answers</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+
+</body>
+</html>

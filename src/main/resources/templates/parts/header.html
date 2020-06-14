@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <body>
 <div class="my_header_main d-flex" th:fragment="content">
     <div class="language_menu d-flex m-auto">
@@ -28,25 +30,27 @@
                 home
             </a>
             <a style="color: #6f3d2d">&#8195|&#8195</a>
-            <!--            <div th:if="${session.userSession == null}">-->
-            <a th:href="@{/sign-in}">
-                sign in
-            </a>
-            <a style="color: #6f3d2d">&#8195|&#8195</a>
-            <a th:href="@{/sign-up}">
-                sign up
-            </a>
-            <!--            </div>-->
-            <!--            <div th:unless="${session.userSession == null}">-->
-            <!--                <a href="/profile">-->
-            <!--                    profile-->
-            <!--                </a>-->
-            <!--                <a style="color: #6f3d2d">&#8195|&#8195</a>-->
-            <!--                <a href="/logout">-->
-            <!--                    logout-->
-            <!--                </a>-->
-            <!--            </c:if>-->
+
+            <span sec:authorize="hasAuthority('USER')">
+                <a th:href="@{/profile}">
+                    profile
+                </a>
+                <a style="color: #6f3d2d">&#8195|&#8195</a>
+                <a th:href="@{/logout}">
+                    logout
+                </a>
+            </span>
+            <span sec:authorize="!hasAuthority('USER')">
+                <a th:href="@{/sign-in}">
+                    sign in
+                </a>
+                <a style="color: #6f3d2d">&#8195|&#8195</a>
+                <a th:href="@{/sign-up}">
+                    sign up
+                </a>
+            </span>
         </div>
     </div>
+</div>
 </div>
 </body>

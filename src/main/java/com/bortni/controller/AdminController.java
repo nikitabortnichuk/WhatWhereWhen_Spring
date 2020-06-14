@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,15 @@ public class AdminController {
         this.questionService = questionService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String signInPage(){
         return "admin/sign_in_admin";
+    }
+
+    @PostMapping(value = "sign-in")
+    public String signIn(){
+
+        return "redirect:";
     }
 
     @GetMapping(value = "/show-questions")
@@ -71,7 +78,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "/add-question-answer")
-    public String addQuestionAnswer(@ModelAttribute QuestionNoVariants questionNoVariants, Model model){
+    public String addQuestionAnswer(@ModelAttribute @Valid QuestionNoVariants questionNoVariants, Model model){
 
         questionService.save(questionNoVariants);
 
@@ -80,7 +87,7 @@ public class AdminController {
 
     @PostMapping(value = "/add-question-variants")
     public String addQuestionVariants(@RequestParam String isCorrect,
-                                      @ModelAttribute QuestionWithVariants questionWithVariants,
+                                      @ModelAttribute @Valid QuestionWithVariants questionWithVariants,
                                       Model model){
 
         questionService.setIsCorrect(isCorrect, questionWithVariants);

@@ -8,22 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping
 public class HomeController {
 
     @GetMapping(value = {"/", "/home"})
     public String home(){
         return "home";
-    }
-
-    @GetMapping(value = "/sign-in")
-    public String signIn(){
-        return "sign_in";
-    }
-
-    @GetMapping(value = "/sign-up")
-    public String signUp(){
-        return "sign_up";
     }
 
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -26,7 +27,8 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "game_identification")
+    @NotNull
+    @Column(name = "game_identification", nullable = false, unique = true)
     private String gameIdentification;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -50,6 +52,7 @@ public class Game {
     )
     private Set<User> users;
 
+    @NotNull
     private boolean isAvailable;
 
 }
