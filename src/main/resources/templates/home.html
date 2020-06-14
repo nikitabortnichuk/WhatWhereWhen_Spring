@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="${locale}" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div id="create_game">
+    <div th:replace="~{parts/create_game :: content}"></div>
+</div>
+
+<div id="find_game">
+    <div th:replace="~{parts/find_game :: content}"></div>
+</div>
+
+<div class="content d-flex">
+
+    <div class="m-auto">
+        <div class="slogan">
+            <h1>What? Where? When?</h1>
+        </div>
+        <div class="buttons">
+            <a class="button_home d-block" href="#find_game">
+                <h2>Find a Game</h2>
+            </a>
+            <a class="button_home d-block" href="#create_game">
+                <h2>Create a Game</h2>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+</body>

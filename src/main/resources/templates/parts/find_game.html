@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="game_create" th:fragment="content">
+    <a href="#" class="close"><img th:src="@{/images/close.svg}"></a>
+
+    <form class="create_game_form form-group" method="post"
+          action="/find-game">
+
+        <h3 class="create_game_name">Find a game</h3>
+
+        <div class="d-flex justify-content-between">
+
+            <div class="game_labels">
+                <label for="game_identification">Game id:</label>
+            </div>
+            <div class="game_inputs">
+                <input type="text" class="form-control game_identification" name="game_identification"
+                       id="game_identification" placeholder="Enter game identification">
+            </div>
+        </div>
+
+        <div class="create_button">
+            <input type="submit" class="btn btn-light" value="FIND">
+        </div>
+    </form>
+</div>
+</body>

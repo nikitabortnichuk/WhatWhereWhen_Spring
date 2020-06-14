@@ -1,0 +1,481 @@
+/* HOME PAGE */
+a {
+    text-decoration: none !important;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background-color: #fee0c1 !important;
+}
+
+/* HEADER */
+
+.logo {
+    width: 50px;
+    height: 50px;
+}
+
+.arrow {
+    width: 10px;
+}
+
+.my_header_main a, p {
+    color: #6f3d2d;
+}
+
+.dropdown_language {
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.dropdown_language:hover .dropdown-content {
+    display: block;
+}
+
+/* CONTENT */
+
+.content {
+    height: 50%;
+}
+
+.content .slogan, .buttons {
+    text-align: center;
+}
+
+.slogan {
+    margin-bottom: 50px;
+}
+
+.button_home h2 {
+    border: #6f3d2d 5px solid;
+    margin: 10px;
+    padding: 5px;
+}
+
+.button_home h2:hover {
+    color: #fee0c1;
+    background: #6f3d2d;
+}
+
+.content h1, h2 {
+    color: #6f3d2d;
+}
+
+h3 {
+    color: #6f3d2d;
+}
+
+.game_table th {
+    color: #6f3d2d !important;
+}
+
+.game_table td {
+    color: #6f3d2d !important;
+}
+
+#create_game, #find_game {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.game_create {
+    width: 400px;
+    height: 350px;
+    text-align: center;
+    padding: 15px;
+    border: 3px solid #6f3d2d;
+    border-radius: 10px;
+    color: #6f3d2d;
+    box-shadow: 0 0 10px 5px grey;
+    background: #fee0c1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+#create_game:target, #find_game:target {
+    display: block;
+}
+
+.close {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.create_game_form .game_inputs input {
+    width: 200px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.create_game_name {
+    margin-bottom: 15px;
+}
+
+.game_inputs input, .game_inputs .password {
+    margin-bottom: 15px;
+}
+
+.game_labels label {
+    display: block;
+    text-align: left;
+    margin-bottom: 22px;
+}
+
+.create_button {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.create_game_form .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin: auto;
+}
+
+.game_window {
+    box-shadow: 0 0 5px 2px rgba(122, 122, 122, 0.5);
+    border-radius: 10px;
+}
+
+.game_window .main_window {
+    width: 650px;
+    height: 550px;
+    background: white;
+    border-radius: 10px 0 0 10px;
+    padding: 15px;
+}
+
+.users_field {
+    width: 250px;
+    height: 550px;
+    border-radius: 0 10px 10px 0;
+    position: relative;
+    border-left: 1px solid #6f3d2d;
+}
+
+.users_field .connected_users {
+    height: 160px;
+    background: #fee0c1;
+    position: relative;
+    top: 0;
+    right: 0;
+    border-top-right-radius: 10px;
+}
+
+.connected_users textarea {
+    height: 140px;
+    width: 100%;
+    border-top-right-radius: 10px;
+    resize: none;
+    border: none;
+    background-color: #6f3d2d;
+    color: white;
+    font-size: 12px;
+    text-align: left !important;
+}
+
+.connected_user {
+    padding: 10px;
+    width: 100%;
+    height: 20px;
+
+}
+
+.connected_user span {
+    color: #6F3D2D;
+}
+
+.connected_users span {
+    margin-left: 10px;
+    color: #6F3D2D;
+}
+
+.no-gray {
+    background-color: white;
+}
+
+.messages textarea {
+    width: 100%;
+    height: 310px;
+    resize: none;
+    border: none;
+    border-bottom: 1px solid #6f3d2d;
+}
+
+.gameId {
+    border-top: 1px solid #6f3d2d;
+    padding: 10px;
+    height: 40px;
+}
+
+.gameId p {
+    margin: 0;
+}
+
+.btn-simple {
+    width: 35px;
+    height: 30px;
+    padding: 0 !important;
+    text-align: center;
+    font-size: 12px !important;
+    margin: 5px 5px 5px 5px;
+}
+
+.messages {
+    height: 340px;
+    width: 100%;
+}
+
+.message-input {
+    background-color: white;
+    border-bottom-right-radius: 10px;
+    height: 40px;
+    margin-top: -6px;
+}
+
+.message-input input {
+    border: none !important;
+    width: 150px;
+    margin-left: 10px;
+}
+
+.messageList {
+    padding: 10px;
+}
+
+.main-message {
+    text-align: center;
+}
+
+.question-wrap {
+    height: 200px;
+    width: 500px;
+    margin: 40px auto;
+    border-radius: 10px;
+    display: flex;
+}
+
+.question {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.question-number, .question-text {
+    color: #6f3d2d;
+}
+
+.question-text {
+    font-size: 18px;
+}
+
+.variantList {
+    width: 80%;
+}
+
+/* FOOTER */
+
+.my_footer .social_icon img {
+    width: 25px;
+}
+
+.social_icon {
+    margin: 10px 5px;
+}
+
+.social_info {
+    width: 150px;
+    margin-left: auto;
+    margin-right: 50px;
+}
+
+.my_footer {
+    position: fixed; /* Фиксированное положение */
+    right: 0;
+    bottom: 0; /* Левый нижний угол */
+    width: 100%;
+}
+
+.my_footer .copyright {
+    background: #6f3d2d; /* Цвет фона */
+    color: #fee0c1; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+    height: 20px;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ADMIN PAGE */
+
+.admin_page {
+    height: 100%;
+}
+
+.admin_left_menu {
+    height: 100%;
+    width: 20%;
+    background: #218DA6;
+    position: fixed;
+    overflow: auto;
+}
+
+.library_admin_text p {
+    color: white;
+    font-size: 30px;
+    margin: 30px auto;
+}
+
+.admin_menu_button p {
+    border: 2px solid white;
+    border-radius: 25px;
+    margin: 30px 30px;
+    padding: 5px 0;
+    color: white;
+    text-align: center;
+}
+
+.admin_menu_button p:hover {
+    background: #52BAD2;
+}
+
+.admin_right {
+    position: absolute;
+    margin-left: 23%;
+    width: 72%;
+}
+
+.admin_welcome_text p {
+    color: #218DA6;
+    font-size: 40px;
+    margin: 20px auto 0 0;
+}
+
+.margin_block {
+    margin-bottom: 30px;
+}
+
+.table_question_list {
+    width: 100%;
+}
+
+.table_question_list table {
+    width: 100%;
+}
+
+.table_question_list table {
+    border-color: #218DA6;
+}
+
+.table_question_list thead {
+    color: white;
+}
+
+.table_question_list .table-primary thead {
+    background-color: #218DA6;
+}
+
+.table_question_list .table-primary tbody {
+    background-color: white;
+    color: #218DA6;
+}
+
+.admin_title_content {
+    color: #218DA6;
+    font-size: 30px;
+}
+
+.admin_line {
+    width: 100%;
+    height: 2px;
+    background: #218DA6;
+}
+
+.my_form_item p {
+    margin: 5px 0 5px 0;
+    font-size: 18px;
+    color: #218DA6;
+}
+
+.admin_edit_delete_book {
+    text-decoration: underline !important;
+}
+
+.table_question_list p {
+    color: #218DA6;
+}
+
+.link_button {
+    background: none;
+    border: none;
+    color: #218DA6;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: serif;
+}
+
+.link_button:focus {
+    outline: none;
+}
+
+.link_button:active {
+    color: #fee0c1;
+}
+
+.add_button {
+    color: #218DA6;
+    font-size: 20px;
+}
+
+.variants {
+    display: none;
+}
+
+.answer {
+    display: none;
+}
+
+.variantTexts label {
+    color: #218DA6;
+    font-size: 18px;
+}
+
+.variant_is_right label {
+    margin-bottom: 15px;
+    color: #218DA6;
+    font-size: 18px;
+}
+
+#no_variants, #with_variants{
+    display: none;
+}
+
+#no_variants:target, #with_variants:target{
+    display: block;
+}

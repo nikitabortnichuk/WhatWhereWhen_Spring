@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="admin_left_menu" th:fragment="content">
+    <div class="library_admin_text d-block text-center">
+        <p class="m-1">WhatWhereWhen</p>
+        <p class="m-1">Admin</p>
+    </div>
+    <a class="admin_menu_button d-block" th:href="@{/admin/show-questions}">
+        <p>Show all questions</p>
+    </a>
+    <a class="admin_menu_button d-block" th:href="@{/admin/add-question}">
+        <p>Add the question</p>
+    </a>
+    <a class="admin_menu_button d-block" th:href="@{/home}">
+        <p>Back to the site</p>
+    </a>
+</div>
+</body>
