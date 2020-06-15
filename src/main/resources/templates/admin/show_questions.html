@@ -10,7 +10,7 @@
     <div class="admin_right">
         <div class="margin_block">
             <div class="admin_welcome_text d-flex">
-                <p>Welcome, ${sessionScope.adminSession.login}</p>
+                <p th:text="'Welcome, ' + ${login}"></p>
             </div>
             <div class="admin_line"></div>
         </div>

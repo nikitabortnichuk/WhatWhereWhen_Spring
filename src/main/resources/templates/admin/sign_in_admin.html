@@ -8,7 +8,10 @@
 <div class="">
     <div class="sign-up col-lg-4" style="color: white; margin:100px auto auto auto">
         <h3 class="mb-3">ADMINISTRATOR</h3>
-        <form class="sign_form" th:action="@{admin/sign-in}" method="post">
+        <div style="color: red" th:if="${param.error}">
+            Invalid username and password.
+        </div>
+        <form class="sign_form" th:action="@{/admin/sign-in}" method="post">
             <div class="form-group">
                 <label for="login" style="color: #6f3d2d">Login</label>
                 <input type="text" class="form-control" id="login" placeholder="Enter login" name="login" required>

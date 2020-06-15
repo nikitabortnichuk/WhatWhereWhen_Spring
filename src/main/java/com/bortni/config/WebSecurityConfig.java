@@ -1,7 +1,6 @@
 package com.bortni.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,27 +16,78 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig{
 
-    @Bean
-    public static BCryptPasswordEncoder getBCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Configuration
+    @Order(1)
+    public static class AdminConfigurationAdapter extends WebSecurityConfigurerAdapter {
+
+        private final DataSource dataSource;
+        private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+        @Autowired
+        public AdminConfigurationAdapter(DataSource dataSource, BCryptPasswordEncoder bCryptPasswordEncoder) {
+            this.dataSource = dataSource;
+            this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/admin/**")
+                    .authorizeRequests()
+                    .anyRequest().hasAuthority("ADMIN")
+                    .and()
+                    .csrf().disable()
+                    .formLogin()
+                    .loginPage("/admin/sign-in")
+                    .loginProcessingUrl("/admin/sign-in")
+                    .usernameParameter("login")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/admin/show-questions")
+                    .failureUrl("/admin/sign-in?error=true")
+                    .permitAll()
+                    .and()
+                    .logout()
+                    .logoutUrl("/admin/logout")
+                    .logoutSuccessUrl("/home")
+                    .permitAll();
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.jdbcAuthentication()
+                    .dataSource(dataSource)
+                    .passwordEncoder(bCryptPasswordEncoder)
+                    .usersByUsernameQuery("select login as username, password, true as enabled from admin where login=?")
+                    .authoritiesByUsernameQuery("select login as username, 'ADMIN' from admin where login=?");
+
+        }
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            super.configure(web);
+            web
+                    .ignoring()
+                    .antMatchers("/css/**", "/img/**", "/js/**", "/errors/**");
+        }
     }
 
     @Configuration
-    @Order(1)
     public static class UserConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
         private final DataSource dataSource;
+        private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
         @Autowired
-        public UserConfigurationAdapter(DataSource dataSource) {
+        public UserConfigurationAdapter(DataSource dataSource, BCryptPasswordEncoder bCryptPasswordEncoder) {
             this.dataSource = dataSource;
+            this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                    .antMatchers("/game-www", "/home", "/sign-in", "/sign-up").permitAll()
+                    .antMatchers("/", "/home", "/sign-in", "/sign-up").permitAll()
                     .antMatchers("/game", "/profile").hasAuthority("USER")
                     .antMatchers("/*")
                     .authenticated()
@@ -59,7 +109,7 @@ public class WebSecurityConfig{
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.jdbcAuthentication()
                     .dataSource(dataSource)
-                    .passwordEncoder(getBCryptPasswordEncoder())
+                    .passwordEncoder(bCryptPasswordEncoder)
                     .usersByUsernameQuery("select username, password, true as enabled from users where username=?")
                     .authoritiesByUsernameQuery("select username, 'USER' from users where username=?");
 
@@ -71,58 +121,6 @@ public class WebSecurityConfig{
             web
                     .ignoring()
                     .antMatchers("/css/**", "/images/**", "/js/**", "/errors/**");
-        }
-    }
-
-    @Configuration
-    @Order(2)
-    public static class AdminConfigurationAdapter extends WebSecurityConfigurerAdapter {
-
-        private final DataSource dataSource;
-
-        @Autowired
-        public AdminConfigurationAdapter(DataSource dataSource) {
-            this.dataSource = dataSource;
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http
-                    .authorizeRequests()
-                    .antMatchers("/", "/home", "/sign-in", "/sign-up", "/admin/sign-in").permitAll()
-                    .antMatchers("/admin/**").hasAuthority("ADMIN")
-                    .antMatchers("/*")
-                    .authenticated()
-                    .and()
-                    .csrf().disable()
-                    .formLogin()
-                    .loginPage("/admin/sign-in")
-                    .defaultSuccessUrl("/admin/show-questions")
-                    .failureUrl("/admin/sign-in?error=true")
-                    .permitAll()
-                    .and()
-                    .logout()
-                    .logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/home")
-                    .permitAll();
-        }
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.jdbcAuthentication()
-                    .dataSource(dataSource)
-                    .passwordEncoder(getBCryptPasswordEncoder())
-                    .usersByUsernameQuery("select login, password, true as enabled from admin where login=?")
-                    .authoritiesByUsernameQuery("select login, 'ADMIN' from admin where login=?");
-
-        }
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            super.configure(web);
-            web
-                    .ignoring()
-                    .antMatchers("/css/**", "/img/**", "/js/**", "/errors/**");
         }
     }
 

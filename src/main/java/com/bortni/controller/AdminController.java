@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,23 +31,18 @@ public class AdminController {
         this.questionService = questionService;
     }
 
-    @GetMapping
+    @GetMapping(value = {"/", "/sign-in"})
     public String signInPage(){
         return "admin/sign_in_admin";
     }
 
-    @PostMapping(value = "sign-in")
-    public String signIn(){
-
-        return "redirect:";
-    }
-
     @GetMapping(value = "/show-questions")
-    public String showQuestions(Model model){
+    public String showQuestions(Model model, Principal principal){
 
         List<Question> questionList = questionService.findAll();
 
         model.addAttribute("questionList", questionList);
+        model.addAttribute("login", principal.getName());
         return "admin/show_questions";
     }
 
