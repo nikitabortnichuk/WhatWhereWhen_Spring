@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div class="content d-flex mb-5">
+    <div class="game_window m-auto d-flex">
+        <div class="main_window" id="main-window">
+            <div id="main-message-question" class="main-message">
+                <h1 id="start-message"></h1>
+                <div id="question-wrap" class="question-wrap d-flex">
+                    <div id="question" class="question">
+                        <h2 class="question-number" id="question-number"></h2>
+                        <p class="question-text" id="question-text"></p>
+                        <div class="variantList d-flex justify-content-between" id="variantList"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="round-timer" class="round-timer">
+                <p class="timer-text" id="timer-text"></p>
+                <p class="timer-seconds" id="timer-seconds"></p>
+            </div>
+            <div class="answer-is-correct text-center" id="answer-is-correct">
+                <p class="is-correct-message" id="is-correct-message"></p>
+            </div>
+        </div>
+        <div class="users_field">
+            <div class="connected_users" id="connected_users_wrap">
+                <span>Connected Experts:</span>
+                <div id="connected_users"></div>
+            </div>
+            <div class="gameId">
+                <span th:text="'Game id: ' + ${session.gameId}" style="color: #6f3d2d"></span>
+            </div>
+            <div class="messages">
+                <textarea id="messageList" class="messageList no-gray" readonly="readonly" rows="15"
+                          cols="15"></textarea>
+                <div class="message-input">
+                    <input id="messageInput" type="text" name="message" placeholder="Type message...">
+                    <button type="button" class="btn btn-simple btn-info" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+
+</body>
+
+<script>
+    var username = "[[${session.username}]]";
+    var gameId = "[[${session.gameId}]]";
+    sessionStorage.setItem("username", username);
+    sessionStorage.setItem("gameId", gameId);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{/js/websocket.js}">
+</script>
+
+</html>

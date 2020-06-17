@@ -2,7 +2,6 @@ package com.bortni.model.entity;
 
 import com.bortni.model.entity.question.Question;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +9,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -27,7 +24,6 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
     @Column(name = "game_identification", nullable = false, unique = true)
     private String gameIdentification;
 
@@ -52,7 +48,7 @@ public class Game {
     )
     private Set<User> users;
 
-    @NotNull
+    @Column(nullable = false)
     private boolean isAvailable;
 
 }

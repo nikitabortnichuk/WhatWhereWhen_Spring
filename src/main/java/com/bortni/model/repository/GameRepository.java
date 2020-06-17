@@ -14,4 +14,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("SELECT g FROM Game g INNER JOIN g.users u WHERE u.id = :id")
     Set<Game> findByUserId(@Param("id") Long id);
 
+    Game findByGameIdentification(String identification);
+
 }

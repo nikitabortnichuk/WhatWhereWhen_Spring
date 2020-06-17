@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @NoArgsConstructor
@@ -17,11 +18,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Statistics {
 
+    @Column(nullable = true)
     private int expertScore;
+    @Column(nullable = true)
     private int opponentScore;
 
+    @Column(nullable = true)
     private int numberOfUsedHints;
+    @Column(nullable = true)
     private int averageTimePerRound;
+    @Column(nullable = true)
     private int averageScorePerRound;
 
 }
