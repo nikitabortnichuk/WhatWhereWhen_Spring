@@ -2,6 +2,7 @@ package com.bortni.model.entity.question;
 
 import com.bortni.model.entity.Game;
 import com.bortni.model.entity.Variant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,14 +22,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @ToString
 @Entity
 @DiscriminatorValue("NO_VARIANTS")
 public class QuestionNoVariants extends Question {
 
-    @NotNull
-    @Column(nullable = false)
+    @Column(nullable = true)
+    @JsonIgnore
     private String answer;
 
     public QuestionNoVariants(long id, String questionText, QuestionType questionType, Set<Game> games, String answer){

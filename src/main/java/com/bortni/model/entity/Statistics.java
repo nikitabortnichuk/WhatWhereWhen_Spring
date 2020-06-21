@@ -1,6 +1,7 @@
 package com.bortni.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.Embeddable;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 @Embeddable
 public class Statistics {
 

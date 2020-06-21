@@ -1,13 +1,18 @@
 package com.bortni.service;
 
 import com.bortni.model.entity.User;
+import com.bortni.model.exception.MyEntityNotFoundException;
 import com.bortni.model.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -21,14 +26,13 @@ public class UserService {
     public void save(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-    }
-
-    public User findByUsernameAndPassword(String username, String password){
-        return userRepository.findByUsernameAndPassword(username, password).get(); // todo exception
+        LOGGER.debug("User saved");
     }
 
     public User findByUsername(String username){
-        return userRepository.findByUsername(username).get(); // todo exception
+        LOGGER.info("Searching for user by username");
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new MyEntityNotFoundException("User not found"));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bortni.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder
 @ToString(exclude = "games")
 @Table(name = "users")
 public class User {
@@ -39,6 +42,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "users")
-    private Set<Game> games;
+    @ManyToMany(mappedBy = "users")
+    private Set<Game> games = new HashSet<>();
 }

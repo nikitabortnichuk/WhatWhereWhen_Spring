@@ -27,7 +27,14 @@
             </tr>
             </thead>
             <tbody>
-
+            <tr th:each="game : ${gameList}">
+                <td th:text="${gameStat.count}"></td>
+                <td th:text="${game.gameIdentification}"></td>
+                <td th:text="${game.configuration.getRoundsNumber()}"></td>
+                <td th:text="${game.configuration.getPlayersNumber()}"></td>
+                <td th:text="${game.statistics.expertScore}"></td>
+                <td th:text="${game.statistics.opponentScore}"></td>
+            </tr>
             </tbody>
         </table>
     </div>

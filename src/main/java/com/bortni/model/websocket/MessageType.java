@@ -2,10 +2,12 @@ package com.bortni.model.websocket;
 
 public enum MessageType {
 
-    CHAT,
     JOIN,
-    LEAVE,
+    START,
+    CHAT,
+    END,
     ASK,
-    ANSWER
+    ANSWER,
+    LEAVE
 
 }

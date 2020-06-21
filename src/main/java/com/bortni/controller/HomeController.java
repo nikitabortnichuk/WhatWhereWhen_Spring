@@ -2,6 +2,7 @@ package com.bortni.controller;
 
 import com.bortni.model.entity.Game;
 import com.bortni.model.entity.User;
+import com.bortni.model.exception.MyEntityNotFoundException;
 import com.bortni.service.GameService;
 import com.bortni.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +58,15 @@ public class HomeController {
     @PostMapping(value = "/find-game")
     public String findGame(@RequestParam @NotNull String gameId, HttpSession httpSession, Principal principal) {
 
-        Game game = gameService.findByIdentification(gameId);
-        httpSession.setAttribute("gameId", game.getGameIdentification());
-        httpSession.setAttribute("username", principal.getName());
+        try {
+            Game game = gameService.findByIdentification(gameId);
+            httpSession.setAttribute("gameId", game.getGameIdentification());
+            httpSession.setAttribute("username", principal.getName());
 
-        return "redirect:/game/" + gameId;
+            return "redirect:/game/" + gameId;
+        } catch (MyEntityNotFoundException e) {
+            return "redirect:/home?error=true";
+        }
     }
 
     @PostMapping(value = "/create-game")
@@ -71,7 +76,6 @@ public class HomeController {
         String gameId = game.getGameIdentification();
         httpSession.setAttribute("gameId", gameId);
         httpSession.setAttribute("username", principal.getName());
-
         return "redirect:/game/" + gameId;
     }
 

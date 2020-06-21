@@ -15,7 +15,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
 public class WebSocketEventListener {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketEventListener.class);
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final SimpUserRegistry simpUserRegistry;
@@ -28,7 +28,7 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        logger.info("Received a new web socket connection.");
+        LOGGER.info("Received a new web socket connection.");
     }
 
     @EventListener
@@ -38,7 +38,7 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         String gameId = (String) headerAccessor.getSessionAttributes().get("gameId");
         if (username != null) {
-            logger.info(username + ": disconnected");
+            LOGGER.info(username + ": disconnected");
 
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setSender(username);

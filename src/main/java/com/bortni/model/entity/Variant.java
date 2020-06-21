@@ -1,6 +1,7 @@
 package com.bortni.model.entity;
 
 import com.bortni.model.entity.question.QuestionWithVariants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -32,15 +33,17 @@ public class Variant {
     private long id;
 
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String text;
 
     @NotNull
     @Column(name = "is_correct", nullable = false)
+    @JsonIgnore
     private boolean correct;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
+    @JsonIgnore
     private QuestionWithVariants question;
 
     public long getId() {

@@ -2,7 +2,9 @@ package com.bortni.model.entity.question;
 
 import com.bortni.model.entity.Game;
 import com.bortni.model.entity.Variant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @ToString
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -38,7 +39,8 @@ public abstract class Question {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "questions")
+    @ManyToMany(mappedBy = "questions")
+    @JsonIgnore
     private Set<Game> games;
 
     public abstract List<Variant> getVariantList();

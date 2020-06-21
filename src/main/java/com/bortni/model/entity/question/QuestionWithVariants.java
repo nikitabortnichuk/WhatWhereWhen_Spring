@@ -22,13 +22,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @ToString(exclude = "variantList")
 @Entity
 @DiscriminatorValue("WITH_VARIANTS")
 public class QuestionWithVariants extends Question {
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Variant> variantList;
 
     public QuestionWithVariants(long id, String questionText, QuestionType questionType, Set<Game> games, List<Variant> variantList){
