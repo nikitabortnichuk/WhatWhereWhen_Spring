@@ -9,21 +9,21 @@
 
 <div class="content m-5">
     <div class="container">
-        <h2>PROFILE</h2>
+        <h2 th:text="#{profile}"></h2>
 
-        <p th:text="'Username: ' + ${user.getUsername()}">Username</p>
-        <p th:text="'Email: ' + ${user.getEmail()}">Email</p>
+        <p th:text="#{profile.username} + ': ' + ${user.getUsername()}">Username</p>
+        <p th:text="#{profile.email} + ': ' + ${user.getEmail()}">Email</p>
 
-        <h3>My games: </h3>
+        <h3 th:text="#{profile.games}"></h3>
         <table class="game_table table">
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Game Identification</th>
-                <th scope="col">Number of rounds</th>
-                <th scope="col">Number of players</th>
-                <th scope="col">Correct answers</th>
-                <th scope="col">Incorrect answers</th>
+                <th scope="col" th:text="#{profile.game.gameId}">Game id</th>
+                <th scope="col" th:text="#{profile.game.rounds}">Number of rounds</th>
+                <th scope="col" th:text="#{profile.game.players}">Number of players</th>
+                <th scope="col" th:text="#{profile.game.correct}">Correct answers</th>
+                <th scope="col" th:text="#{profile.game.incorrect}">Incorrect answers</th>
             </tr>
             </thead>
             <tbody>

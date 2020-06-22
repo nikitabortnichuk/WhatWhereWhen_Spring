@@ -204,14 +204,14 @@ public class GameController {
 
         String message;
         if (actualAnswer.equalsIgnoreCase(correctAnswer)) {
-            message = "Answer is correct";
+            message = "correct";
             sendAnswerIsCorrect(gameId, gameMessage, message, true);
             LOGGER.debug("Sending correct message");
         } else if (actualAnswer.equals("")) {
             sendTimeIsOver(gameId, gameMessage);
             LOGGER.debug("Time to answer is over");
         } else {
-            message = "Answer is not correct";
+            message = "incorrect";
             sendAnswerIsCorrect(gameId, gameMessage, message, false);
             LOGGER.debug("Sending incorrect message");
         }
@@ -227,7 +227,7 @@ public class GameController {
     }
 
     private void sendTimeIsOver(String gameId, GameMessage gameMessage){
-        String message = "Time is over";
+        String message = "timeIsOver";
         synchronized (answerMap) {
             List<Boolean> isCorrectAnswers = answerMap.get(gameId);
             if (isCorrectAnswers == null) {

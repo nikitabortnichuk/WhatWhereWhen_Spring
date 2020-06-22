@@ -195,6 +195,8 @@ function processTimerForQuestionAnswer(message, roundNumber) {
     var timerText = timerElement.children["timer-text"];
     timerText.innerHTML = "Round Started. Remaining time: ";
 
+    var seconds = message["roundTime"];
+
     timer(seconds,
         function (s) {
             var element = timerElement.children["timer-seconds"];

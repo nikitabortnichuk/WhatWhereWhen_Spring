@@ -8,10 +8,10 @@
     <div class="language_menu d-flex m-auto">
         <div class="language">
             <div class="dropdown_language">
-                <a href="?locale=en">EN</a>
+                <a href="?lang=en">EN</a>
                 <a class="dropdown_link"><img class="arrow" th:src="@{/images/down-arrow.svg}"></a>
                 <div class="dropdown-content">
-                    <a href="?locale=ua">UA</a>
+                    <a href="?lang=ua">UA</a>
                 </div>
             </div>
         </div>
@@ -27,26 +27,26 @@
         </div>
         <div class="sign_in col-6 text-right m-auto">
             <a th:href="@{/home}">
-                home
+                <span th:text="#{home.home}"></span>
             </a>
             <a style="color: #6f3d2d">&#8195|&#8195</a>
 
             <span sec:authorize="hasAuthority('USER')">
                 <a th:href="@{/profile}">
-                    profile
+                    <span th:text="#{home.profile}"></span>
                 </a>
                 <a style="color: #6f3d2d">&#8195|&#8195</a>
                 <a th:href="@{/logout}">
-                    logout
+                    <span th:text="#{home.logout}"></span>
                 </a>
             </span>
             <span sec:authorize="!hasAuthority('USER')">
                 <a th:href="@{/sign-in}">
-                    sign in
+                    <span th:text="#{home.signIn}"></span>
                 </a>
                 <a style="color: #6f3d2d">&#8195|&#8195</a>
                 <a th:href="@{/sign-up}">
-                    sign up
+                    <span th:text="#{home.signUp}"></span>
                 </a>
             </span>
         </div>
