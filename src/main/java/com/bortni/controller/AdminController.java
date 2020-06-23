@@ -7,6 +7,9 @@ import com.bortni.model.entity.question.QuestionType;
 import com.bortni.model.entity.question.QuestionWithVariants;
 import com.bortni.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +40,8 @@ public class AdminController {
     }
 
     @GetMapping(value = "/show-questions")
-    public String showQuestions(Model model, Principal principal){
-
-        List<Question> questionList = questionService.findAll();
+    public String showQuestions(@PageableDefault(size = 5) Pageable pageable, Model model, Principal principal){
+        Page<Question> questionList = questionService.findAll(pageable);
 
         model.addAttribute("questionList", questionList);
         model.addAttribute("login", principal.getName());

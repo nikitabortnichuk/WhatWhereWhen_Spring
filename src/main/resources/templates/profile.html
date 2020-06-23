@@ -27,16 +27,46 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="game : ${gameList}">
+            <tr th:each="game : ${gameList.content}">
                 <td th:text="${gameStat.count}"></td>
                 <td th:text="${game.gameIdentification}"></td>
-                <td th:text="${game.configuration.getRoundsNumber()}"></td>
-                <td th:text="${game.configuration.getPlayersNumber()}"></td>
+                <td th:text="${game.configuration.roundsNumber}"></td>
+                <td th:text="${game.configuration.playersNumber}"></td>
                 <td th:text="${game.statistics.expertScore}"></td>
                 <td th:text="${game.statistics.opponentScore}"></td>
             </tr>
             </tbody>
         </table>
+        <nav class="d-flex" aria-label="Navigation for questions">
+            <ul class="pagination m-auto">
+                <li th:if="${gameList.hasPrevious()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/admin/show-questions(page=${gameList.number -1})}">
+                        Previous</a>
+                </li>
+
+                <th:block th:each="i: ${#numbers.sequence(0, gameList.totalPages -1)}">
+
+                    <li th:if="${gameList.number == i}" class="page-item active">
+                        <a class="page-link">
+                            [[${i}+1]]
+                        </a>
+                    </li>
+
+                    <li th:unless="${gameList.number == i}" class="page-item">
+                        <a class="page-link" th:href="@{/admin/show-questions(page=${i})}">[[${i}+1]]</a>
+                    </li>
+
+                </th:block>
+
+                <li th:if="${gameList.hasNext()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/admin/show-questions(page=${gameList.number +1})}">
+                        Next</a>
+                </li>
+            </ul>
+        </nav>
+
     </div>
 </div>
 

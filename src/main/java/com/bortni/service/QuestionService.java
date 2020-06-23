@@ -7,6 +7,8 @@ import com.bortni.model.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -74,5 +76,10 @@ public class QuestionService {
                 questionWithVariants.getVariantList().get(3).setCorrect(true);
                 break;
         }
+    }
+
+    public Page<Question> findAll(Pageable pageable) {
+        LOGGER.info("Searching for question list paged");
+        return questionRepository.findAll(pageable);
     }
 }

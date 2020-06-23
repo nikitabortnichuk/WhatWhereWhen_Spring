@@ -36,8 +36,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="question : ${questionList}">
-                        <td th:text="${questionStat.count}"></td>
+                    <tr th:each="question : ${questionList.content}">
+                        <td th:text="${question.id}"></td>
                         <td th:text="${question.questionText}"></td>
                         <td th:text="${question.questionType}"></td>
 
@@ -81,6 +81,37 @@
                     </tr>
                     </tbody>
                 </table>
+
+                <nav class="d-flex" aria-label="Navigation for questions">
+                    <ul class="pagination m-auto">
+                        <li th:if="${questionList.hasPrevious()}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{/admin/show-questions(page=${questionList.number -1})}">
+                                Previous</a>
+                        </li>
+
+                        <th:block th:each="i: ${#numbers.sequence(0, questionList.totalPages -1)}">
+
+                            <li th:if="${questionList.number == i}" class="page-item active">
+                                <a class="page-link">
+                                    [[${i}+1]]
+                                </a>
+                            </li>
+
+                            <li th:unless="${questionList.number == i}" class="page-item">
+                                <a class="page-link" th:href="@{/admin/show-questions(page=${i})}">[[${i}+1]]</a>
+                            </li>
+
+                        </th:block>
+
+                        <li th:if="${questionList.hasNext()}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{/admin/show-questions(page=${questionList.number +1})}">
+                                Next</a>
+                        </li>
+                    </ul>
+                </nav>
+
             </div>
         </div>
     </div>

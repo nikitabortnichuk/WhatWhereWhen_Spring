@@ -5,6 +5,9 @@ import com.bortni.model.entity.User;
 import com.bortni.service.GameService;
 import com.bortni.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +28,9 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profile(Model model, Principal principal){
+    public String profile(@PageableDefault(size = 5) Pageable pageable, Model model, Principal principal){
         User user = userService.findByUsername(principal.getName());
-        List<Game> gameList = gameService.findByUserId(user.getId());
+        Page<Game> gameList = gameService.findByUserId(user.getId(), pageable);
 
         model.addAttribute("user", user);
         model.addAttribute("gameList", gameList);
