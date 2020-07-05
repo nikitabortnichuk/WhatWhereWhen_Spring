@@ -41,7 +41,7 @@
             <ul class="pagination m-auto">
                 <li th:if="${gameList.hasPrevious()}" class="page-item">
                     <a class="page-link"
-                       th:href="@{/admin/show-questions(page=${gameList.number -1})}">
+                       th:href="@{/profile(page=${gameList.number -1})}">
                         Previous</a>
                 </li>
 
@@ -54,14 +54,14 @@
                     </li>
 
                     <li th:unless="${gameList.number == i}" class="page-item">
-                        <a class="page-link" th:href="@{/admin/show-questions(page=${i})}">[[${i}+1]]</a>
+                        <a class="page-link" th:href="@{/profile(page=${i})}">[[${i}+1]]</a>
                     </li>
 
                 </th:block>
 
                 <li th:if="${gameList.hasNext()}" class="page-item">
                     <a class="page-link"
-                       th:href="@{/admin/show-questions(page=${gameList.number +1})}">
+                       th:href="@{/profile(page=${gameList.number +1})}">
                         Next</a>
                 </li>
             </ul>

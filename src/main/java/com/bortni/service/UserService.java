@@ -1,7 +1,7 @@
 package com.bortni.service;
 
 import com.bortni.model.entity.User;
-import com.bortni.model.exception.MyEntityNotFoundException;
+import com.bortni.model.exception.EntityNotFoundException;
 import com.bortni.model.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class UserService {
     public User findByUsername(String username){
         LOGGER.info("Searching for user by username");
         return userRepository.findByUsername(username).orElseThrow(
-                () -> new MyEntityNotFoundException("User not found"));
+                () -> new EntityNotFoundException("User not found"));
     }
 
 }

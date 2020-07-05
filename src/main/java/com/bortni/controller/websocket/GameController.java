@@ -45,6 +45,7 @@ public class GameController {
     private static Map<String, List<Question>> questionMap = new HashMap<>();
     private static final Map<String, List<Boolean>> answerMap = new HashMap<>();
     private static final Map<String, List<Question>> actualQuestionMap = new HashMap<>();
+    private static final Map<String, Game> gameMap = new HashMap<>();
 
     @Autowired
     public GameController(SimpMessageSendingOperations simpMessageSendingOperations, SimpUserRegistry simpUserRegistry, GameService gameService, QuestionService questionService, UserService userService) {
@@ -87,16 +88,25 @@ public class GameController {
         messagingTemplate.convertAndSend(String.format("/channel/%s", gameId), chatMessage);
 
         if (isUsersNumberMatchConfig(gameId, usernameSet.size())) {
+            initGame(gameId);
             addToQuestionMap(gameId);
             sendStartMessage(gameId);
             LOGGER.debug("Game started");
         }
     }
 
+    private void initGame(String gameId) {
+        Game game = gameMap.get(gameId);
+        if(game == null) {
+            game = gameService.findByIdentification(gameId);
+            gameMap.put(gameId, game);
+        }
+    }
+
     private void addToQuestionMap(String gameId) {
         List<Question> questionList = questionMap.get(gameId);
         if (questionList == null) {
-            Game game = gameService.findByIdentification(gameId);
+            Game game = gameMap.get(gameId);
             int roundsNumber = game.getConfiguration().getRoundsNumber();
             questionList = questionService.findNRandomQuestions(roundsNumber);
             questionMap.put(gameId, questionList);
@@ -130,7 +140,7 @@ public class GameController {
 
     private void sendQuestion(String gameId, GameMessage gameMessage, int roundNumber) {
 
-        Game game = gameService.findByIdentification(gameId);
+        Game game = gameMap.get(gameId);
         int roundTime = game.getConfiguration().getRoundTime();
         int roundsNumberCount = game.getConfiguration().getRoundsNumber();
 
@@ -155,7 +165,7 @@ public class GameController {
     }
 
     private void processGameEnding(String gameId) {
-        Game game = gameService.findByIdentification(gameId);
+        Game game = gameMap.get(gameId);
 
         int correctAnswers = getIsCorrectNumberCount(gameId, true);
         int incorrectAnswers = getIsCorrectNumberCount(gameId, false);
@@ -221,7 +231,7 @@ public class GameController {
     private void sendAnswerIsCorrect(String gameId, GameMessage gameMessage, String message, boolean isCorrect) {
         List<Boolean> isCorrectAnswers = answerMap.computeIfAbsent(gameId, k -> new ArrayList<>());
         isCorrectAnswers.add(isCorrect);
-        gameMessage.setIsCorrect(false);
+        gameMessage.setIsCorrect(isCorrect);
         gameMessage.setMessage(message);
         messagingTemplate.convertAndSend(String.format("/channel/%s", gameId), gameMessage);
     }

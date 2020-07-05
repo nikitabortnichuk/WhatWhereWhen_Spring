@@ -2,7 +2,7 @@ package com.bortni.service;
 
 import com.bortni.model.entity.question.Question;
 import com.bortni.model.entity.question.QuestionWithVariants;
-import com.bortni.model.exception.MyEntityNotFoundException;
+import com.bortni.model.exception.EntityNotFoundException;
 import com.bortni.model.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class QuestionService {
 
     public Question findById(Long id) {
         LOGGER.info("Searching for question by id");
-        return questionRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Question not found"));
+        return questionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
     public void save(Question question) {
