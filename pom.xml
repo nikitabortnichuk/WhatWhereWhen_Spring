@@ -20,6 +20,7 @@
 
     <properties>
         <java.version>11</java.version>
+        <slf4j.log4j12.version>1.7.30</slf4j.log4j12.version>
     </properties>
 
     <dependencies>
