@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+<div class="admin_page d-flex">
+
+    <div th:replace="~{admin/left_part :: content}"></div>
+
+    <div class="admin_right">
+        <div class="margin_block">
+            <div class="admin_welcome_text d-flex">
+                <p>Welcome, ${sessionScope.adminSession.login}</p>
+            </div>
+            <div class="admin_line"></div>
+        </div>
+        <div class>
+            <p class="admin_title_content">Add the question</p>
+        </div>
+        <div class="add_book_form">
+            <form method="post"
+                  th:action="@{/admin/add-question-answer}" th:object="${questionNoVariants}">
+
+                <div class="my_form_item">
+                    <p>Question text:</p>
+                    <input type="text"
+                           placeholder="Enter text"
+                           th:field="*{questionText}"
+                           required>
+                </div>
+
+                <div class="my_form_item">
+                    <p>Question answer:</p>
+                    <input type="text"
+                           placeholder="Enter answer"
+                           th:field="*{answer}"
+                           required>
+                </div>
+
+                <div class="my_form_item mt-3">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

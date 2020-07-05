@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<body>
+<div class="my_header_main d-flex" th:fragment="content">
+    <div class="language_menu d-flex m-auto">
+        <div class="language">
+            <div class="dropdown_language">
+                <a href="?lang=en">EN</a>
+                <a class="dropdown_link"><img class="arrow" th:src="@{/images/down-arrow.svg}"></a>
+                <div class="dropdown-content">
+                    <a href="?lang=ua">UA</a>
+                </div>
+            </div>
+        </div>
+        <div class="menu d-flex">
+        </div>
+    </div>
+
+    <div class="container d-flex m-auto">
+        <div class="logo_div col-6 justify-content-between m-auto">
+            <a th:href="@{/home}">
+                <img class="logo" th:src="@{/images/logo.png}">
+            </a>
+        </div>
+        <div class="sign_in col-6 text-right m-auto">
+            <a th:href="@{/home}">
+                <span th:text="#{home.home}"></span>
+            </a>
+            <a style="color: #6f3d2d">&#8195|&#8195</a>
+
+            <span sec:authorize="hasAuthority('USER')">
+                <a th:href="@{/profile}">
+                    <span th:text="#{home.profile}"></span>
+                </a>
+                <a style="color: #6f3d2d">&#8195|&#8195</a>
+                <a th:href="@{/logout}">
+                    <span th:text="#{home.logout}"></span>
+                </a>
+            </span>
+            <span sec:authorize="!hasAuthority('USER')">
+                <a th:href="@{/sign-in}">
+                    <span th:text="#{home.signIn}"></span>
+                </a>
+                <a style="color: #6f3d2d">&#8195|&#8195</a>
+                <a th:href="@{/sign-up}">
+                    <span th:text="#{home.signUp}"></span>
+                </a>
+            </span>
+        </div>
+    </div>
+</div>
+</div>
+</body>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div class="content d-flex mb-5">
+    <div class="game_window m-auto d-flex">
+        <div class="main_window" id="main-window">
+            <div id="main-message-question" class="main-message">
+                <h1 id="start-message"></h1>
+                <div id="question-wrap" class="question-wrap d-flex">
+                    <div id="question" class="question">
+                        <h2 class="question-number" id="question-number"></h2>
+                        <p class="question-text" id="question-text"></p>
+                        <div class="variantList m-auto d-flex justify-content-between" id="variantList"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="round-timer" class="round-timer">
+                <p class="timer-text" id="timer-text"></p>
+                <p class="timer-seconds" id="timer-seconds"></p>
+            </div>
+            <div class="answer-is-correct text-center" id="answer-is-correct">
+                <p class="is-correct-message" id="is-correct-message"></p>
+            </div>
+        </div>
+        <div class="users_field">
+            <div class="connected_users" id="connected_users_wrap">
+                <span th:text="#{game.experts}">Connected Experts:</span>
+                <div id="connected_users"></div>
+            </div>
+            <div class="gameId">
+                <span th:text="#{game.gameId} + ': ' + ${session.gameId}" style="color: #6f3d2d"></span>
+            </div>
+            <div class="messages">
+                <textarea id="messageList" class="messageList no-gray" readonly="readonly" rows="15"
+                          cols="15"></textarea>
+                <div class="message-input">
+                    <input id="messageInput" type="text" name="message"
+                           th:placeholder="#{game.chat.placeholder} + '...'">
+                    <button type="button" class="btn btn-simple btn-info" onclick="sendMessage()"
+                            th:text="#{game.chat.button}">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+
+</body>
+
+<script>
+    var username = "[[${session.username}]]";
+    var gameId = "[[${session.gameId}]]";
+    sessionStorage.setItem("username", username);
+    sessionStorage.setItem("gameId", gameId);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    usernameSession = sessionStorage.getItem("username");
+    gameIdSession = sessionStorage.getItem("gameId");
+
+    var username = usernameSession;
+    var gameId = gameIdSession;
+    var topic = `/game-www/game/${gameId}`;
+    var currentSubscription;
+
+    var socket = new SockJS('/game-www/ws');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, onConnected, onError);
+
+    function onConnected() {
+        enterGame(window.gameId);
+    }
+
+    function onError() {
+
+    }
+    function enterGame(gameId) {
+
+        if (currentSubscription) {
+            currentSubscription.unsubscribe();
+        }
+        currentSubscription = stompClient.subscribe(`/channel/${gameId}`, onMessageReceived);
+
+        var connected = "[[#{game.connected}]]";
+
+        stompClient.send(`${topic}/addUser`,
+            {},
+            JSON.stringify({sender: `${username}`, type: 'JOIN', content: connected}));
+    }
+
+    function onMessageReceived(payload) {
+
+        var message = JSON.parse(payload.body);
+
+        if (message.type === 'JOIN') {
+            printConnectedUsers(message);
+            printMessage(message);
+        } else if (message.type === 'LEAVE') {
+            removeConnectedUser(message);
+            printMessage(message);
+        } else if (message.type === 'CHAT') {
+            printMessage(message)
+        } else if (message.type === 'START') {
+            printStartMessage();
+            processGameStart(message);
+        } else if (message.type === 'ASK') {
+            processGame(message);
+        } else if (message.type === 'ANSWER') {
+            printAnswerIsCorrect(message);
+        } else if (message.type === 'END') {
+            processGameEnd(message);
+        }
+
+    }
+
+    function printConnectedUsers(message) {
+        var usersField = document.getElementById("connected_users");
+        usersField.innerHTML = "";
+
+        var userList = message["usernameSet"];
+        userList.forEach(username => printConnectedUser(username, usersField))
+
+    }
+
+    function printConnectedUser(username, usersField) {
+        var connectedUserDiv = document.createElement("div");
+        connectedUserDiv.setAttribute("id", username);
+        connectedUserDiv.setAttribute("class", "connected_user");
+        var usernameSpan = document.createElement("span");
+
+        usernameSpan.innerHTML = "• " + "[[#{game.experts.expert}]]" + ": " + username;
+        connectedUserDiv.appendChild(usernameSpan);
+        usersField.appendChild(connectedUserDiv);
+    }
+
+    function removeConnectedUser(message) {
+        document.getElementById(message.sender).remove();
+    }
+
+    function printMessage(message) {
+        var messagesField = document.getElementById("messageList");
+        messagesField.innerHTML += `${message.sender}: ${message.content}\n`;
+    }
+
+    function sendMessage() {
+        var messageInput = document.getElementById("messageInput");
+        var message = {
+            sender: `${username}`,
+            type: 'CHAT',
+            content: messageInput.value
+        };
+        stompClient.send(`${topic}/sendMessage`,
+            {},
+            JSON.stringify(message)
+        );
+        messageInput.value = '';
+    }
+
+    function printStartMessage() {
+        var startMessageH1 = document.getElementById("start-message");
+        startMessageH1.style.setProperty("color", "#6F3D2D");
+        startMessageH1.innerHTML = "[[#{game.start}]]";
+        setTimeout(removeStartQuestion, 3000);
+    }
+
+    function removeStartQuestion() {
+        var startMessageH1 = document.getElementById("start-message");
+        startMessageH1.innerHTML = "";
+    }
+
+    function processGameStart(message) {
+        setTimeout(
+            function () {
+                sendRound(message, 0)
+            }, 3000
+        );
+    }
+
+    function sendRound(message, roundNumber) {
+        var askMessage = {
+            type: 'ASK',
+            roundNumber: roundNumber
+        };
+        stompClient.send(`${topic}/sendQuestion`,
+            {},
+            JSON.stringify(askMessage)
+        );
+    }
+
+    function processGame(message) {
+        printQuestion(message);
+
+        var roundNumber = message["roundNumber"] + 1;
+        processRound(message, roundNumber);
+    }
+
+    function printQuestion(message) {
+        var questionWrap = document.getElementById("question-wrap");
+        questionWrap.style.setProperty("box-shadow", "0 0 5px 2px rgba(122, 122, 122, 0.5)");
+
+        var questionDiv = questionWrap.children["question"];
+        questionDiv.style.backgroundColor = "#fee0c1";
+        questionDiv.children["variantList"].innerHTML = "";
+
+        var questionNumber = questionDiv.children["question-number"];
+        var questionText = questionDiv.children["question-text"];
+        var number = message["roundNumber"] + 1;
+        questionNumber.innerHTML = "[[#{game.question}]]" + number + ":";
+        questionText.innerHTML = message["question"]["questionText"];
+
+        printVariants(message, questionDiv);
+    }
+
+    function printVariants(message, questionDiv) {
+        var variantListDiv = questionDiv.children["variantList"];
+        var variantList = message["question"]["variantList"];
+        for (let i = 0; i < variantList.length; i++) {
+            var variantP = document.createElement("p");
+            variantP.innerHTML = (i + 1) + ". " + variantList[i].text;
+            variantListDiv.appendChild(variantP);
+        }
+    }
+
+    var isAnswered = false;
+
+    function processRound(message, roundNumber) {
+        isAnswered = false;
+        var timerElement = document.getElementById("round-timer");
+        timerElement.style.textAlign = "center";
+
+        var timerText = timerElement.children["timer-text"];
+        timerText.innerHTML = "[[#{game.timer.read}]]";
+        var seconds = 10;
+        timer(seconds,
+            function (s) {
+                var element = timerElement.children["timer-seconds"];
+                element.innerHTML = s;
+            },
+            message,
+            roundNumber,
+            function (message, roundNumber) {
+                processTimerForQuestionAnswer(message, roundNumber);
+                printAnswerInputIfNull(message);
+            }
+        )
+    }
+
+    function processTimerForQuestionAnswer(message, roundNumber) {
+        var timerElement = document.getElementById("round-timer");
+        timerElement.style.textAlign = "center";
+
+        var timerText = timerElement.children["timer-text"];
+        timerText.innerHTML = "[[#{game.timer.round}]]";
+
+        var seconds = message["roundTime"];
+
+        timer(seconds,
+            function (s) {
+                var element = timerElement.children["timer-seconds"];
+                element.innerHTML = s;
+            },
+            message,
+            roundNumber,
+            function (message) {
+                processTimeIsOver(message);
+            });
+    }
+
+    function processTimeIsOver(message) {
+        sendQuestionAnswer(message);
+    }
+
+    function timer(seconds, tick, message, roundNumber, afterFunction) {
+        if (seconds > 0) {
+            seconds -= 1;
+            tick(seconds);
+            if (isAnswered === true) {
+                return;
+            }
+            setTimeout(function () {
+                timer(seconds, tick, message, roundNumber, afterFunction);
+            }, 1000);
+        } else {
+            afterFunction(message, roundNumber);
+        }
+    }
+
+    function printAnswerInputIfNull(json) {
+        var inputDiv = document.getElementById("question-answer");
+        if (inputDiv === null) {
+            printAnswerInput(json);
+        }
+    }
+
+    function printAnswerInput(json) {
+        var mainWindow = document.getElementById("main-window");
+
+        var answerInputDivWrap = document.createElement("div");
+        answerInputDivWrap.id = "question-answer-div";
+        answerInputDivWrap.style.display = "flex";
+
+        var answerInputDiv = document.createElement("div");
+        answerInputDiv.id = "question-answer";
+        answerInputDiv.style.margin = "auto";
+        answerInputDiv.style.width = "250px";
+        answerInputDiv.style.height = "40px";
+        answerInputDiv.style.border = "1px solid #6f3d2d";
+        answerInputDiv.style.borderRadius = "5px";
+
+        var answerInput = document.createElement("input");
+        answerInput.type = "text";
+        answerInput.name = "question-answer-input" + json["roundNumber"];
+        answerInput.id = "question-answer-input" + json["roundNumber"];
+        answerInput.placeholder = "[[#{game.answer.placeholder}]]";
+        answerInput.style.border = "0px solid #6f3d2d";
+        answerInput.style.marginLeft = "10px";
+        answerInput.style.width = "150px";
+        answerInputDiv.appendChild(answerInput);
+
+        var button = document.createElement("button");
+        button.type = "button";
+        button.setAttribute("class", "btn btn-simple btn-info");
+        button.innerHTML = "[[#{game.chat.button}]]";
+        button.onclick = function () {
+            sendQuestionAnswer(json);
+        };
+
+        answerInputDiv.appendChild(button);
+        answerInputDivWrap.appendChild(answerInputDiv);
+        mainWindow.appendChild(answerInputDivWrap);
+    }
+
+    function removeElement(element) {
+        element.innerHTML = "";
+    }
+
+    function sendQuestionAnswer(message) {
+        var number = message["roundNumber"];
+        var valueInput = document.getElementById("question-answer-input" + number);
+        var value = "";
+
+        if (valueInput != null) {
+            value = valueInput.value;
+        }
+
+        var answerMessage = {
+            type: 'ANSWER',
+            answer: value,
+            roundNumber: number
+        };
+        isAnswered = true;
+        stompClient.send(`${topic}/sendAnswer`, {}, JSON.stringify(answerMessage));
+    }
+
+    function printAnswerIsCorrect(json) {
+
+        var timerElement = document.getElementById("round-timer");
+        var timerText = timerElement.children["timer-text"];
+        var timerSeconds = timerElement.children["timer-seconds"];
+
+        timerText.innerHTML = "";
+        timerSeconds.innerHTML = "";
+
+        var message = json["message"];
+        var isCorrect = json["isCorrect"];
+        var roundNumber = json["roundNumber"];
+
+        document.getElementById("question-answer-div").remove();
+
+        var answerDiv = document.getElementById("answer-is-correct");
+        var isCorrectMessage = answerDiv.children["is-correct-message"];
+        isCorrectMessage.style.fontSize = "24px";
+
+        if (isCorrect === true) {
+            isCorrectMessage.style.color = "green";
+        } else if (isCorrect === false) {
+            isCorrectMessage.style.color = "red";
+        }
+        isCorrectMessage.innerHTML = getIsCorrectMessage(message);
+
+        setTimeout(function () {
+            removeElement(isCorrectMessage);
+            sendRound(json, roundNumber + 1);
+        }, 3000);
+    }
+
+    function getIsCorrectMessage(message) {
+        var newMessage;
+        if(message === "correct"){
+            newMessage = "[[#{game.answer.correct}]]";
+        }
+        else if(message === "incorrect") {
+            newMessage = "[[#{game.answer.incorrect}]]";
+        }
+        else if(message === "timeIsOver") {
+            newMessage = "[[#{game.answer.timeIsOver}]]";
+        }
+        return newMessage;
+    }
+
+    function processGameEnd(json) {
+        document.getElementById("question-wrap").remove();
+        document.getElementById("round-timer").remove();
+
+        var endMessageH1 = document.getElementById("start-message");
+        endMessageH1.innerHTML = "[[#{game.end}]]";
+
+        var mainWindow = document.getElementById("main-window");
+
+        var scoreP = document.createElement("p");
+        scoreP.style.fontSize = "24px";
+        scoreP.innerHTML = "[[#{game.score}]]";
+        mainWindow.appendChild(scoreP);
+
+        var correctP = document.createElement("p");
+        correctP.style.fontSize = "18px";
+        correctP.innerHTML = "[[#{game.result.correct}]] " + json["correctAnswers"];
+        mainWindow.appendChild(correctP);
+
+        var incorrectP = document.createElement("p");
+        incorrectP.style.fontSize = "18px";
+        incorrectP.innerHTML = "[[#{game.result.incorrect}]] " + json["incorrectAnswers"];
+        mainWindow.appendChild(incorrectP);
+
+        var homeRef = document.createElement("a");
+        homeRef.href = "/game-www/home";
+        homeRef.innerHTML = "[[#{game.result.home}]]";
+        mainWindow.appendChild(homeRef);
+    }
+</script>
+
+</html>

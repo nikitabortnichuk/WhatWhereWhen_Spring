@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div class="content m-5">
+    <div class="container">
+        <h2 th:text="#{profile}"></h2>
+
+        <p th:text="#{profile.username} + ': ' + ${user.getUsername()}">Username</p>
+        <p th:text="#{profile.email} + ': ' + ${user.getEmail()}">Email</p>
+
+        <h3 th:text="#{profile.games}"></h3>
+        <table class="game_table table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" th:text="#{profile.game.gameId}">Game id</th>
+                <th scope="col" th:text="#{profile.game.rounds}">Number of rounds</th>
+                <th scope="col" th:text="#{profile.game.players}">Number of players</th>
+                <th scope="col" th:text="#{profile.game.correct}">Correct answers</th>
+                <th scope="col" th:text="#{profile.game.incorrect}">Incorrect answers</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="game : ${gameList.content}">
+                <td th:text="${gameStat.count}"></td>
+                <td th:text="${game.gameIdentification}"></td>
+                <td th:text="${game.configuration.roundsNumber}"></td>
+                <td th:text="${game.configuration.playersNumber}"></td>
+                <td th:text="${game.statistics.expertScore}"></td>
+                <td th:text="${game.statistics.opponentScore}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <nav class="d-flex" aria-label="Navigation for questions">
+            <ul class="pagination m-auto">
+                <li th:if="${gameList.hasPrevious()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/profile(page=${gameList.number -1})}">
+                        Previous</a>
+                </li>
+
+                <th:block th:each="i: ${#numbers.sequence(0, gameList.totalPages -1)}">
+
+                    <li th:if="${gameList.number == i}" class="page-item active">
+                        <a class="page-link">
+                            [[${i}+1]]
+                        </a>
+                    </li>
+
+                    <li th:unless="${gameList.number == i}" class="page-item">
+                        <a class="page-link" th:href="@{/profile(page=${i})}">[[${i}+1]]</a>
+                    </li>
+
+                </th:block>
+
+                <li th:if="${gameList.hasNext()}" class="page-item">
+                    <a class="page-link"
+                       th:href="@{/profile(page=${gameList.number +1})}">
+                        Next</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+
+</body>
+</html>

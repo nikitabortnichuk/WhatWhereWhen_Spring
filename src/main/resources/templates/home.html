@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body>
+
+<div th:replace="~{parts/header :: content}"></div>
+
+<div id="create_game">
+    <div class="game_create">
+        <a href="#" class="close"><img th:src="@{/images/close.svg}"></a>
+
+        <form class="create_game_form form-group" method="post"
+              th:action="@{/create-game}" th:object="${game}">
+
+            <h3 class="create_game_name" th:text="#{home.create}"></h3>
+
+            <div class="d-flex justify-content-between">
+
+                <div class="game_labels">
+                    <label for="players_number" th:text="#{home.create.players}"></label>
+                    <label for="rounds_number" th:text="#{home.create.rounds}"></label>
+                    <label for="round_time" th:text="#{home.create.time}"></label>
+                </div>
+                <div class="game_inputs">
+                    <input type="number" class="form-control players_number" id="players_number"
+                           th:placeholder="'Enter number of players'"
+                           th:field="*{configuration.playersNumber}"
+                           min="2" max="5">
+                    <input type="number" class="form-control rounds_number" id="rounds_number"
+                           th:placeholder="'Enter number of rounds'"
+                           th:field="*{configuration.roundsNumber}"
+                           min="2" max="10">
+                    <input type="number" class="form-control round_time" id="round_time"
+                           th:placeholder="'Enter round time'"
+                           th:field="*{configuration.roundTime}"
+                           min="20" max="120">
+                </div>
+
+            </div>
+
+            <div class="create_button">
+                <input type="submit" class="btn btn-light" th:value="#{home.create.button}">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="find_game">
+    <div class="game_create">
+        <a href="#" class="close"><img th:src="@{/images/close.svg}"></a>
+
+        <form class="create_game_form form-group" method="post"
+              th:action="@{/find-game}">
+
+            <h3 class="create_game_name" th:text="#{home.find}"></h3>
+
+            <div class="d-flex justify-content-between">
+
+                <div class="game_labels">
+                    <label for="game_identification">Game id:</label>
+                </div>
+                <div class="game_inputs">
+                    <input type="text" class="form-control game_identification" name="gameId"
+                           id="game_identification" th:placeholder="#{home.find.gameId}">
+                </div>
+            </div>
+
+            <div class="create_button">
+                <input type="submit" class="btn btn-light" th:value="#{home.find.button}">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="content d-flex">
+
+    <div class="m-auto">
+        <div style="text-align: center" th:if="${param.error}">
+            <span style="color: red" th:text="#{home.find.notFound}"></span>
+        </div>
+        <div class="slogan">
+            <h1 th:text="#{home.slogan}"></h1>
+        </div>
+        <div class="buttons">
+            <a class="button_home d-block" href="#find_game">
+                <h2 th:text="#{home.find}"></h2>
+            </a>
+            <a class="button_home d-block" href="#create_game">
+                <h2 th:text="#{home.create}"></h2>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{parts/footer :: content}"></div>
+</body>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{parts/head_tag :: content}"></div>
+
+<body style="width: 100%">
+<div class="admin_page d-flex">
+    <div th:replace="~{admin/left_part :: content}"></div>
+    <div class="admin_right">
+        <div class="margin_block">
+            <div class="admin_welcome_text d-flex">
+                <p th:text="'Welcome, ' + ${login}"></p>
+            </div>
+            <div class="admin_line"></div>
+        </div>
+        <div>
+            <p class="admin_title_content">All questions</p>
+        </div>
+
+        <a class="add_button" th:href="@{/admin/add-question}">
+            + Add new question
+        </a>
+
+        <div class="question_list mt-3">
+            <div class="table_question_list">
+                <table class="table table-primary table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Text</th>
+                        <th>Type</th>
+                        <th>Variants</th>
+                        <th>Answer</th>
+                        <th>Edit/Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="question : ${questionList.content}">
+                        <td th:text="${question.id}"></td>
+                        <td th:text="${question.questionText}"></td>
+                        <td th:text="${question.questionType}"></td>
+
+                        <td th:if="${question.questionType == T(com.bortni.model.entity.question.QuestionType).WITH_VARIANTS}">
+                            <div th:each="variant : ${question.variantList}">
+                                <span th:text="${variantStat.count}"></span><!--
+                                --><span>.</span>
+                                <span th:text="${variant.text}"></span>
+                            </div>
+                        </td>
+                        <td th:if="${question.questionType == T(com.bortni.model.entity.question.QuestionType).WITH_VARIANTS}">
+                            <div th:each="variant : ${question.variantList}">
+                                <div th:if="${variant.correct}">
+                                    <span th:text="${variant.text}"></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td th:unless="${question.questionType == T(com.bortni.model.entity.question.QuestionType).WITH_VARIANTS}">
+
+                        </td>
+
+                        <td th:if="${question.questionType == T(com.bortni.model.entity.question.QuestionType).NO_VARIANTS}">
+                            <span th:text="${question.answer}"></span>
+                        </td>
+
+                        <td>
+                            <div class="d-flex">
+                                <form method="get"
+                                      th:action="@{/admin/edit}">
+                                    <input type="hidden" th:name="questionId" th:value="${question.id}">
+                                    <button type="submit" class="link_button">edit</button>
+                                </form>
+                                /
+                                <form method="post"
+                                      th:action="@{/admin/delete}">
+                                    <input type="hidden" th:name="questionId" th:value="${question.id}">
+                                    <button type="submit" name="submit_delete" class="link_button">delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <nav class="d-flex" aria-label="Navigation for questions">
+                    <ul class="pagination m-auto">
+                        <li th:if="${questionList.hasPrevious()}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{/admin/show-questions(page=${questionList.number -1})}">
+                                Previous</a>
+                        </li>
+
+                        <th:block th:each="i: ${#numbers.sequence(0, questionList.totalPages -1)}">
+
+                            <li th:if="${questionList.number == i}" class="page-item active">
+                                <a class="page-link">
+                                    [[${i}+1]]
+                                </a>
+                            </li>
+
+                            <li th:unless="${questionList.number == i}" class="page-item">
+                                <a class="page-link" th:href="@{/admin/show-questions(page=${i})}">[[${i}+1]]</a>
+                            </li>
+
+                        </th:block>
+
+                        <li th:if="${questionList.hasNext()}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{/admin/show-questions(page=${questionList.number +1})}">
+                                Next</a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="my_footer" th:fragment="content">
+    <div class="social_info d-flex justify-content-between">
+        <a th:href="@{https://www.instagram.com/nbortik/}">
+            <div class="social_icon">
+                <img th:src="@{/images/instagram.svg}">
+            </div>
+        </a>
+        <a th:href="@{https://www.facebook.com/nikita.bort}">
+            <div class="social_icon">
+                <img th:src="@{/images/facebook.svg}">
+            </div>
+        </a>
+        <a th:href="@{https://t.me/nbortik}">
+            <div class="social_icon">
+                <img th:src="@{/images/telegram.svg}">
+            </div>
+        </a>
+        <a href="https://en.wikipedia.org/wiki/What%3F_Where%3F_When%3F">
+            <div class="social_icon">
+                <img th:src="@{/images/info.svg}">
+            </div>
+        </a>
+    </div>
+
+    <div class="copyright">
+        ©2019 Nikita Bortnichuk. All rights reserved
+    </div>
+</div>
+</body>
